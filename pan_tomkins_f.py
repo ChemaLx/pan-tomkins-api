@@ -2,12 +2,16 @@ import numpy as np
 import pandas as pd
 import math
 import sys
+
+# TODO: hacer que el timestamp se pase como parametros desde la funcion que inicializa el analisis
 time_stamp = []
 fs = 360
-for i in range(0,3600):
-    time_stamp.append(i)
 
-def iniciar(ecg):
+
+def iniciar(ecg, signal_len):
+  for i in range(0,signal_len):
+    time_stamp.append(i)
+  print(len(time_stamp))
   arr = np.array(ecg)
   QRS_detector = Pan_Tompkins_QRS()
   integration_signal, band_pass_signal, derivative_signal, square_signal  = QRS_detector.solve(arr.copy())

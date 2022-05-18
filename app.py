@@ -1,15 +1,12 @@
 from flask import Flask, jsonify
 from flask import request
+import requests
 from fakeapi import datos_ECG
 from flask_cors import CORS, cross_origin
 import pan_tomkins_f
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
-time_stamp = []
-for i in range(0,3600):
-    time_stamp.append(i)
-#print(time_stamp)
 
 
 @app.route('/procesar', methods=['POST'])
@@ -21,11 +18,11 @@ def procesar_datos():
     sexo = request_data['sexo']
     ecg.pop()
     print(len(ecg))
-    print(len(time_stamp))
     ecg_int = []
     for muestra in ecg:
         ecg_int.append(float(muestra))
-    heart_beat = pan_tomkins_f.iniciar(ecg_int)
+    
+    heart_beat = pan_tomkins_f.iniciar(ecg_int, len(ecg_int))
     
     print("Heart Rate: "+ str(60/heart_beat) + " BPM")
     
