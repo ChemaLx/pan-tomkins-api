@@ -4,17 +4,17 @@ import math
 import sys
 
 # TODO: hacer que el timestamp se pase como parametros desde la funcion que inicializa el analisis
-time_stamp = []
 fs = 360
 
 
 def iniciar(ecg, signal_len):
+  time_stamp = []
   for i in range(0,signal_len):
     time_stamp.append(i)
   print(len(time_stamp))
   arr = np.array(ecg)
   QRS_detector = Pan_Tompkins_QRS()
-  integration_signal, band_pass_signal, derivative_signal, square_signal  = QRS_detector.solve(arr.copy())
+  integration_signal, band_pass_signal, derivative_signal, square_signal  = QRS_detector.solve(arr.copy(),time_stamp)
 
   fs = 360
     
@@ -25,7 +25,7 @@ def iniciar(ecg, signal_len):
 
 class Pan_Tompkins_QRS():
 
-  def low_pass_filter(self, signal):
+  def low_pass_filter(self, signal,time_stamp):
     low_pass_signal = signal.copy()
     for time in time_stamp:
       curr = signal[time] 
@@ -46,7 +46,7 @@ class Pan_Tompkins_QRS():
     low_pass_signal = low_pass_signal/ max(abs(low_pass_signal))
     return low_pass_signal
 
-  def high_pass_filter(self, signal):
+  def high_pass_filter(self, signal,time_stamp):
 
     high_pass_signal = signal.copy()
 
@@ -67,14 +67,14 @@ class Pan_Tompkins_QRS():
     return high_pass_signal
 
   
-  def band_pass_filter(self,signal):
-    low_pass_signal = self.low_pass_filter(signal)
-    band_pass_signal = self.high_pass_filter(low_pass_signal)
+  def band_pass_filter(self,signal,time_stamp):
+    low_pass_signal = self.low_pass_filter(signal,time_stamp)
+    band_pass_signal = self.high_pass_filter(low_pass_signal,time_stamp)
 
     return band_pass_signal    
 
   
-  def derivative(self,signal):
+  def derivative(self,signal,time_stamp):
     T = 1/fs
     derivative_signal = signal.copy()
 
@@ -99,7 +99,7 @@ class Pan_Tompkins_QRS():
   def squaring(self,signal):
     return np.square(signal)
 
-  def moving_window_integration(self,signal):
+  def moving_window_integration(self,signal,time_stamp):
     WINDOW_SIZE = 0.15*fs
     moving_window_signal = signal.copy()
     for time in time_stamp:
@@ -115,12 +115,12 @@ class Pan_Tompkins_QRS():
     return moving_window_signal
 
 
-  def solve(self,signal):
+  def solve(self,signal,time_stamp):
 
-    band_pass_signal = self.band_pass_filter(signal.copy())
-    derivative_signal = self.derivative(band_pass_signal.copy())
+    band_pass_signal = self.band_pass_filter(signal.copy(),time_stamp)
+    derivative_signal = self.derivative(band_pass_signal.copy(),time_stamp)
     square_signal = self.squaring(derivative_signal.copy())
-    moving_window_avg_signal = self.moving_window_integration(square_signal.copy())
+    moving_window_avg_signal = self.moving_window_integration(square_signal.copy(),time_stamp)
 
     return moving_window_avg_signal,band_pass_signal, derivative_signal, square_signal
 

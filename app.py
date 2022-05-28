@@ -9,13 +9,12 @@ app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 
-@app.route('/procesar', methods=['POST'])
+@app.route('/procesar-ecg', methods=['POST'])
 def procesar_datos():
     request_data = request.get_json()
     #print(request_data)
     ecg = request_data['electrocardiograma']
-    edad = request_data['edad']
-    sexo = request_data['sexo']
+    print (ecg)
     ecg.pop()
     print(len(ecg))
     ecg_int = []
@@ -29,7 +28,7 @@ def procesar_datos():
     heart_beat = 60/heart_beat
     
     return jsonify({
-        "heart_beat": heart_beat,
+        "ritmo_cardiaco": heart_beat,
         #"ecg": datos_ECG
     })
 
