@@ -14,8 +14,6 @@ def procesar_datos():
     request_data = request.get_json()
     #print(request_data)
     ecg = request_data['electrocardiograma']
-    print (ecg)
-    ecg.pop()
     print(len(ecg))
     ecg_int = []
     for muestra in ecg:
