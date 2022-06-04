@@ -1,8 +1,6 @@
 from flask import Flask, jsonify
 from flask import request
-import requests
-from fakeapi import datos_ECG
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 import pan_tomkins_f
 
 app = Flask(__name__)
@@ -44,4 +42,4 @@ def informacion_usuario():
     })
 
 if __name__ == '__main__':
-    app.run(debug=True, port=4000)
+    app.run(debug=True, port=80)

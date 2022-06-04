@@ -1,7 +1,9 @@
 FROM python:3.8.6
 
-WORKDIR /user/src/app
+ADD . . 
 
-ADD app.py .
+COPY './requirements.txt' .
 
-RUN pip install -r 
+RUN pip install -r requirements.txt
+
+ENTRYPOINT [ "python", "app.py" ]

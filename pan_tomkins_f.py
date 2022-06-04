@@ -1,6 +1,4 @@
 import numpy as np
-import pandas as pd
-import math
 import sys
 
 # TODO: hacer que el timestamp se pase como parametros desde la funcion que inicializa el analisis
